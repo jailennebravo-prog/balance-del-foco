@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Balance del Foco</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(1200px 800px at 50% -10%, #3a2f6e 0%, #1c1538 48%, #0e0a1c 100%);
+    padding: 24px 16px;
+  }
+
+  .brand {
+    color: #cdbcf5;
+    font-size: 13px;
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 24px;
+    padding: 28px 26px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+    backdrop-filter: blur(8px);
+  }
+
+  .progress {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .dot.active { background: #ffd76a; box-shadow: 0 0 0 3px rgba(255,215,106,0.25); }
+  .dot.done { background: #7ee0b5; }
+
+  .qnum {
+    color: #ffd76a;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .scenario {
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 8px 0 4px;
+  }
+  .scenario .quote {
+    font-weight: 400;
+    font-style: italic;
+    color: #e6ddf8;
+    font-size: 16px;
+    display: block;
+    margin-top: 10px;
+    border-left: 3px solid #ffd76a;
+    padding-left: 13px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.05);
+    color: #f0ebff;
+    font-size: 15px;
+    line-height: 1.45;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .opt:hover:not(:disabled) { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
+  .opt:disabled { cursor: default; }
+  .opt .letter {
+    flex: 0 0 26px;
+    height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.12);
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .opt.correct { background: rgba(46,160,106,0.22); border-color: #3ecf8d; }
+  .opt.correct .letter { background: #3ecf8d; color: #07331f; }
+  .opt.wrong { background: rgba(224,72,72,0.18); border-color: #f07070; }
+  .opt.wrong .letter { background: #f07070; color: #3d0a0a; }
+
+  .feedback {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 20px;
+  }
+  .feedback.ok { color: #7ee0b5; }
+  .feedback.no { color: #ffb3b3; }
+
+  .next {
+    display: none;
+    margin-top: 16px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(120deg, #ffd76a, #f5b84a);
+    color: #3a2500;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .next.show { display: block; }
+  .next:hover { filter: brightness(1.05); }
+
+  /* ---- Pantalla final ---- */
+  .final { display: none; text-align: center; }
+  .final .emoji { font-size: 52px; }
+  .final h2 { color: #fff; font-size: 26px; margin: 12px 0 4px; }
+  .final .score { color: #ffd76a; font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+
+  .reflex {
+    text-align: left;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 18px;
+    color: #e6ddf8;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .reflex b { color: #ffd76a; }
+
+  .tips { text-align: left; display: flex; flex-direction: column; gap: 12px; }
+  .tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #f0ebff;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .tip .ico { font-size: 22px; flex: 0 0 auto; }
+  .tip b { color: #fff; }
+</style>
+</head>
+<body>
+
+  <div class="brand">Squad Communications Finance 💛</div>
+
+  <div class="card">
+    <!-- QUIZ -->
+    <div id="quiz">
+      <div class="progress" id="progress"></div>
+      <div class="qnum" id="qnum"></div>
+      <div class="scenario" id="scenario"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="next">Siguiente →</button>
+    </div>
+
+    <!-- FINAL -->
+    <div class="final" id="final">
+      <div class="emoji">⚖️</div>
+      <h2>El Balance del Foco</h2>
+      <div class="score" id="score"></div>
+      <div class="reflex">
+        <b>Una cortica reflexión 🌱</b><br><br>
+        Comunicarnos mejor no es solo hablar claro: es <b>escuchar</b>, <b>validar</b>, <b>abrirnos</b> y <b>agradecer</b>. Dos focos, una misma intención: que nadie tenga miedo de preguntar ni de equivocarse.
+      </div>
+      <div class="tips">
+        <div class="tip"><span class="ico">💛</span><span><b>Apertura — "Se vale no saber".</b><br>Preguntar no es debilidad, es contexto. Atrévete a decir "no sé".</span></div>
+        <div class="tip"><span class="ico">🙏</span><span><b>Lenguaje apreciativo.</b><br>Agradecer de forma explícita cuesta cero y cambia el ambiente.</span></div>
+        <div class="tip"><span class="ico">✅</span><span><b>Validación.</b><br>Reconoce lo que dice el otro ("buen punto", "te entiendo") antes de opinar.</span></div>
+        <div class="tip"><span class="ico">🔁</span><span><b>Parafraseo.</b><br>"Lo que entiendo es que…" para confirmar y demostrar que escuchaste.</span></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const preguntas = [
+    {
+      escenario: "En el chat del equipo 💬",
+      cita: "Un compañero manda una explicación larga de cómo resolvió un error y termina con: “por si a alguien más le sirve.”",
+      opciones: [
+        "Ok, lo leo luego.",
+        "Si entendí bien: primero revisaste la data, encontraste el fallo y lo corregiste. ¡Gracias por dejarlo tan claro, me sirve un montón!",
+        "Mucho texto, resúmelo.",
+        "Eso no aplica a mi trabajo."
+      ],
+      correcta: 1
+    },
+    {
+      escenario: "En una reunión 🗣️",
+      cita: "Un compañero dice: “Me equivoqué en la cifra que presenté ayer.”",
+      opciones: [
+        "Pues sí, fue un error grave.",
+        "Tranquilo, a todos nos ha pasado. Y la verdad yo tampoco me había dado cuenta del detalle… ¿cómo lo descubriste?",
+        "Eso no debió pasar.",
+        "No importa, sigamos con la agenda."
+      ],
+      correcta: 1
+    },
+    {
+      escenario: "En el equipo 🙋",
+      cita: "Alguien dice: “No sé hacer esta parte, ¿alguien me ayuda?”",
+      opciones: [
+        "¿Cómo no vas a saber? Si es lo más básico.",
+        "Yo tampoco lo tenía claro al inicio. Gracias por preguntar, así aprendemos todos — te explico.",
+        "Búscalo en internet.",
+        "Pregúntale a otro, yo estoy ocupado."
+      ],
+      correcta: 1
+    }
+  ];
+
+  const letras = ["A", "B", "C", "D"];
+  let idx = 0;
+  let aciertos = 0;
+
+  const progress = document.getElementById('progress');
+  const qnum = document.getElementById('qnum');
+  const scenario = document.getElementById('scenario');
+  const options = document.getElementById('options');
+  const feedback = document.getElementById('feedback');
+  const nextBtn = document.getElementById('next');
+
+  function render() {
+    // progress dots
+    progress.innerHTML = '';
+    preguntas.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === idx ? ' active' : '') + (i < idx ? ' done' : '');
+      progress.appendChild(d);
+    });
+
+    qnum.textContent = `Pregunta ${idx + 1} de ${preguntas.length}`;
+    const q = preguntas[idx];
+    scenario.innerHTML = `${q.escenario}<span class="quote">${q.cita}</span>`;
+
+    options.innerHTML = '';
+    q.opciones.forEach((op, i) => {
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.innerHTML = `<span class="letter">${letras[i]}</span><span>${op}</span>`;
+      b.onclick = () => responder(i, b);
+      options.appendChild(b);
+    });
+
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+    nextBtn.classList.remove('show');
+    nextBtn.textContent = idx === preguntas.length - 1 ? 'Ver resultado 🎉' : 'Siguiente →';
+  }
+
+  function responder(i, btn) {
+    const q = preguntas[idx];
+    const btns = options.querySelectorAll('.opt');
+    btns.forEach(b => b.disabled = true);
+    if (i === q.correcta) {
+      btn.classList.add('correct');
+      feedback.textContent = '✅ ¡Exacto! Esa es la que combina apertura, aprecio, validación y parafraseo.';
+      feedback.className = 'feedback ok';
+      aciertos++;
+    } else {
+      btn.classList.add('wrong');
+      btns[q.correcta].classList.add('correct');
+      feedback.textContent = '😅 Casi. La respuesta correcta es la que valida, se abre y agradece.';
+      feedback.className = 'feedback no';
+    }
+    nextBtn.classList.add('show');
+  }
+
+  nextBtn.onclick = () => {
+    if (idx < preguntas.length - 1) {
+      idx++;
+      render();
+    } else {
+      // final
+      document.getElementById('quiz').style.display = 'none';
+      const f = document.getElementById('final');
+      f.style.display = 'block';
+      const emoji = aciertos === 3 ? '🏆' : aciertos === 2 ? '💪' : '🌱';
+      f.querySelector('.emoji').textContent = emoji;
+      document.getElementById('score').textContent = `Acertaste ${aciertos} de ${preguntas.length}. ¡Y ya tienes los tips para recordarlo!`;
+    }
+  };
+
+  render();
+</script>
+</body>
+</html>
