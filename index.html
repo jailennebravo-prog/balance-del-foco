@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Validación y Parafraseo</title>
+<title>El Balance del Foco</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -193,22 +193,75 @@
 
     <div class="final" id="final">
       <div class="emoji">✅</div>
-      <h2>Validación y Parafraseo</h2>
+      <h2>El Balance del Foco</h2>
       <div class="score" id="score"></div>
       <div class="reflex">
         <b>Una cortica reflexión 🌱</b><br><br>
-        Liderar no es tener siempre la respuesta: es <b>escuchar antes de decidir</b>. Cuando alguien se atreve a hablar, la forma en que respondes define si lo volverá a hacer.
+        Comunicarnos mejor es <b>escuchar antes de decidir</b> y abrirnos a decir "no sé". Cuando alguien se atreve a hablar —a disentir, pedir ayuda o reconocer un error—, la forma en que respondes (agradeciendo, validando y parafraseando) define si lo volverá a hacer.
       </div>
       <div class="tips">
-        <div class="tip"><span class="ico">🙏</span><span><b>1. Agradece.</b><br>Que te lo hayan dicho ya es valiente. Reconócelo antes de cualquier otra cosa.</span></div>
-        <div class="tip"><span class="ico">🔁</span><span><b>2. Parafrasea.</b><br>"Lo que te escucho es…" Refleja lo que dijo, sin interpretar ni juzgar.</span></div>
-        <div class="tip"><span class="ico">🤝</span><span><b>3. Construye.</b><br>Propón el siguiente paso juntos, sin imponer y sin rescatar.</span></div>
+        <div class="tip"><span class="ico">💛</span><span><b>1. Ábrete.</b><br>"Se vale no saber." Preguntar y reconocer "no sé" es contexto, no debilidad.</span></div>
+        <div class="tip"><span class="ico">🙏</span><span><b>2. Agradece.</b><br>Que te lo hayan dicho ya es valiente. Reconócelo antes de cualquier otra cosa.</span></div>
+        <div class="tip"><span class="ico">✅</span><span><b>3. Valida.</b><br>Reconoce lo que el otro dice antes de opinar o responder.</span></div>
+        <div class="tip"><span class="ico">🔁</span><span><b>4. Parafrasea.</b><br>"Lo que te escucho es…" Refleja lo que dijo, sin interpretar ni juzgar.</span></div>
+        <div class="tip"><span class="ico">🤝</span><span><b>5. Construye.</b><br>Propón el siguiente paso juntos, sin imponer y sin rescatar.</span></div>
       </div>
     </div>
   </div>
 
 <script>
   const preguntas = [
+    {
+      escenario: "En el chat del equipo 💬",
+      cita: "Un compañero manda una explicación larga de cómo resolvió un error y termina con: “por si a alguien más le sirve.”",
+      opciones: [
+        "Ok, lo leo luego.",
+        "Si entendí bien: primero revisaste la data, encontraste el fallo y lo corregiste. ¡Gracias por dejarlo tan claro, me sirve un montón!",
+        "Mucho texto, resúmelo.",
+        "Eso no aplica a mi trabajo."
+      ],
+      porques: [
+        "No reconoce el esfuerzo ni el valor de lo que compartió. Desaprovecha la oportunidad de agradecer.",
+        "Parafrasea lo que entendió, agradece de forma explícita y reconoce el valor de lo compartido.",
+        "Minimiza el aporte del otro y cierra la puerta a que vuelva a compartir.",
+        "Descarta el aporte sin conectar. No valida ni agradece."
+      ],
+      correcta: 1
+    },
+    {
+      escenario: "En una reunión 🗣️",
+      cita: "Un compañero dice: “Me equivoqué en la cifra que presenté ayer.”",
+      opciones: [
+        "Pues sí, fue un error grave.",
+        "Tranquilo, a todos nos ha pasado. Y la verdad yo tampoco me había dado cuenta del detalle… ¿cómo lo descubriste?",
+        "Eso no debió pasar.",
+        "No importa, sigamos con la agenda."
+      ],
+      porques: [
+        "Suma culpa en vez de validar la honestidad de quien se abrió.",
+        "Valida su honestidad, se abre reconociendo que él tampoco lo vio y muestra interés en entender.",
+        "Castiga el error sin reconocer el valor de haberse sincerado.",
+        "Pasa por alto la valentía de reconocer el error y corta la conversación."
+      ],
+      correcta: 1
+    },
+    {
+      escenario: "En el equipo 🙋",
+      cita: "Alguien dice: “No sé hacer esta parte, ¿alguien me ayuda?”",
+      opciones: [
+        "¿Cómo no vas a saber? Si es lo más básico.",
+        "Yo tampoco lo tenía claro al inicio. Gracias por preguntar, así aprendemos todos — te explico.",
+        "Búscalo en internet.",
+        "Pregúntale a otro, yo estoy ocupado."
+      ],
+      porques: [
+        "Ridiculiza a quien se atrevió a preguntar. Enseña que es mejor callar.",
+        "Se abre reconociendo que él tampoco sabía, agradece la pregunta y se ofrece a explicar.",
+        "No valida la pregunta ni ofrece ayuda. Desaprovecha la oportunidad de enseñar.",
+        "Cierra la puerta a la ayuda y desanima a quien preguntó."
+      ],
+      correcta: 1
+    },
     {
       escenario: "Como líder, en la daily 🧭",
       cita: "Alguien del equipo dice frente a todos: “No estoy de acuerdo con la prioridad que pusiste. Creo que estamos dejando lo urgente por lo importante.”",
