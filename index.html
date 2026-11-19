@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>El Balance del Foco</title>
+<title>Validación y Parafraseo</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -38,11 +38,7 @@
     backdrop-filter: blur(8px);
   }
 
-  .progress {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
+  .progress { display: flex; gap: 8px; margin-bottom: 20px; }
   .dot {
     width: 10px; height: 10px;
     border-radius: 50%;
@@ -116,10 +112,18 @@
     margin-top: 16px;
     font-size: 14px;
     font-weight: 600;
+    line-height: 1.5;
     min-height: 20px;
   }
   .feedback.ok { color: #7ee0b5; }
   .feedback.no { color: #ffb3b3; }
+  .feedback .best {
+    display: block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    color: #7ee0b5;
+  }
 
   .next {
     display: none;
@@ -138,7 +142,6 @@
   .next.show { display: block; }
   .next:hover { filter: brightness(1.05); }
 
-  /* ---- Pantalla final ---- */
   .final { display: none; text-align: center; }
   .final .emoji { font-size: 52px; }
   .final h2 { color: #fff; font-size: 26px; margin: 12px 0 4px; }
@@ -179,7 +182,6 @@
   <div class="brand">Squad Communications Finance 💛</div>
 
   <div class="card">
-    <!-- QUIZ -->
     <div id="quiz">
       <div class="progress" id="progress"></div>
       <div class="qnum" id="qnum"></div>
@@ -189,20 +191,18 @@
       <button class="next" id="next">Siguiente →</button>
     </div>
 
-    <!-- FINAL -->
     <div class="final" id="final">
-      <div class="emoji">⚖️</div>
-      <h2>El Balance del Foco</h2>
+      <div class="emoji">✅</div>
+      <h2>Validación y Parafraseo</h2>
       <div class="score" id="score"></div>
       <div class="reflex">
         <b>Una cortica reflexión 🌱</b><br><br>
-        Comunicarnos mejor no es solo hablar claro: es <b>escuchar</b>, <b>validar</b>, <b>abrirnos</b> y <b>agradecer</b>. Dos focos, una misma intención: que nadie tenga miedo de preguntar ni de equivocarse.
+        Liderar no es tener siempre la respuesta: es <b>escuchar antes de decidir</b>. Cuando alguien se atreve a hablar, la forma en que respondes define si lo volverá a hacer.
       </div>
       <div class="tips">
-        <div class="tip"><span class="ico">💛</span><span><b>Apertura — "Se vale no saber".</b><br>Preguntar no es debilidad, es contexto. Atrévete a decir "no sé".</span></div>
-        <div class="tip"><span class="ico">🙏</span><span><b>Lenguaje apreciativo.</b><br>Agradecer de forma explícita cuesta cero y cambia el ambiente.</span></div>
-        <div class="tip"><span class="ico">✅</span><span><b>Validación.</b><br>Reconoce lo que dice el otro ("buen punto", "te entiendo") antes de opinar.</span></div>
-        <div class="tip"><span class="ico">🔁</span><span><b>Parafraseo.</b><br>"Lo que entiendo es que…" para confirmar y demostrar que escuchaste.</span></div>
+        <div class="tip"><span class="ico">🙏</span><span><b>1. Agradece.</b><br>Que te lo hayan dicho ya es valiente. Reconócelo antes de cualquier otra cosa.</span></div>
+        <div class="tip"><span class="ico">🔁</span><span><b>2. Parafrasea.</b><br>"Lo que te escucho es…" Refleja lo que dijo, sin interpretar ni juzgar.</span></div>
+        <div class="tip"><span class="ico">🤝</span><span><b>3. Construye.</b><br>Propón el siguiente paso juntos, sin imponer y sin rescatar.</span></div>
       </div>
     </div>
   </div>
@@ -210,37 +210,55 @@
 <script>
   const preguntas = [
     {
-      escenario: "En el chat del equipo 💬",
-      cita: "Un compañero manda una explicación larga de cómo resolvió un error y termina con: “por si a alguien más le sirve.”",
+      escenario: "Como líder, en la daily 🧭",
+      cita: "Alguien del equipo dice frente a todos: “No estoy de acuerdo con la prioridad que pusiste. Creo que estamos dejando lo urgente por lo importante.”",
       opciones: [
-        "Ok, lo leo luego.",
-        "Si entendí bien: primero revisaste la data, encontraste el fallo y lo corregiste. ¡Gracias por dejarlo tan claro, me sirve un montón!",
-        "Mucho texto, resúmelo.",
-        "Eso no aplica a mi trabajo."
+        "La prioridad ya está definida, sigamos.",
+        "Gracias por decirlo abiertamente, eso suma. Si entiendo bien, te preocupa que lo urgente se nos quede atrás por enfocarnos en lo estratégico… ¿qué tarea te preocupa más?",
+        "Hablemos de eso en privado después.",
+        "Entiendo, pero yo tengo más contexto que tú."
+      ],
+      porques: [
+        "Cierra la conversación sin escuchar. El equipo aprende que disentir no sirve de nada.",
+        "Agradece que se atrevió a disentir, parafrasea su preocupación para confirmar que la entendió y abre la conversación preguntando por su contexto.",
+        "Suena prudente, pero aplaza el tema y deja su inquietud sin validar frente a todo el equipo.",
+        "El “pero” anula el “entiendo”. Es imponer jerarquía, no escuchar."
       ],
       correcta: 1
     },
     {
-      escenario: "En una reunión 🗣️",
-      cita: "Un compañero dice: “Me equivoqué en la cifra que presenté ayer.”",
+      escenario: "Como líder, en un 1:1 💬",
+      cita: "Una persona de tu equipo te dice: “Tengo demasiadas cosas encima y siento que no voy a llegar con todo este mes.”",
       opciones: [
-        "Pues sí, fue un error grave.",
-        "Tranquilo, a todos nos ha pasado. Y la verdad yo tampoco me había dado cuenta del detalle… ¿cómo lo descubriste?",
-        "Eso no debió pasar.",
-        "No importa, sigamos con la agenda."
+        "Todos estamos igual, es temporada alta.",
+        "Organízate mejor y vas a ver que sí alcanzas.",
+        "Lo que entiendo es que no te está gustando el trabajo.",
+        "Gracias por avisarme a tiempo, eso me ayuda a ayudarte. Lo que te escucho es que la carga no te da para cumplir con calidad… revisemos juntos qué podemos mover o delegar."
       ],
-      correcta: 1
+      porques: [
+        "Minimiza lo que siente comparándolo con los demás. No valida su situación.",
+        "Salta a la solución sin escuchar y pone la culpa en la persona.",
+        "Es un parafraseo mal hecho: interpreta en lugar de reflejar. Nunca dijo que no le gusta su trabajo.",
+        "Agradece el aviso a tiempo, refleja exactamente lo que dijo sin interpretar y propone buscar la solución juntos."
+      ],
+      correcta: 3
     },
     {
-      escenario: "En el equipo 🙋",
-      cita: "Alguien dice: “No sé hacer esta parte, ¿alguien me ayuda?”",
+      escenario: "Como líder, frente a un error ⚠️",
+      cita: "Un analista te cuenta: “El reporte que salió a gerencia tenía un dato mal. Ya lo vi, pero no sé cómo decirlo.”",
       opciones: [
-        "¿Cómo no vas a saber? Si es lo más básico.",
-        "Yo tampoco lo tenía claro al inicio. Gracias por preguntar, así aprendemos todos — te explico.",
-        "Búscalo en internet.",
-        "Pregúntale a otro, yo estoy ocupado."
+        "Valoro mucho que me lo digas tú primero. Lo que entiendo es que ya identificaste el error y te preocupa cómo comunicarlo… armemos juntos el mensaje de corrección.",
+        "¿Cómo no lo revisaste antes de enviarlo?",
+        "Déjalo así, seguro nadie lo nota.",
+        "Yo lo arreglo, no te preocupes más por eso."
       ],
-      correcta: 1
+      porques: [
+        "Valora su honestidad, confirma lo que entendió y lo acompaña sin quitarle el protagonismo.",
+        "Castiga la honestidad. La próxima vez quizá prefiera no contarte.",
+        "Evita el problema y pone en riesgo la confianza con gerencia. Tampoco valida su preocupación.",
+        "Parece apoyo, pero es rescatar: le quita la oportunidad de aprender y de resolverlo."
+      ],
+      correcta: 0
     }
   ];
 
@@ -256,7 +274,6 @@
   const nextBtn = document.getElementById('next');
 
   function render() {
-    // progress dots
     progress.innerHTML = '';
     preguntas.forEach((_, i) => {
       const d = document.createElement('div');
@@ -277,7 +294,7 @@
       options.appendChild(b);
     });
 
-    feedback.textContent = '';
+    feedback.innerHTML = '';
     feedback.className = 'feedback';
     nextBtn.classList.remove('show');
     nextBtn.textContent = idx === preguntas.length - 1 ? 'Ver resultado 🎉' : 'Siguiente →';
@@ -289,13 +306,15 @@
     btns.forEach(b => b.disabled = true);
     if (i === q.correcta) {
       btn.classList.add('correct');
-      feedback.textContent = '✅ ¡Exacto! Esa es la que combina apertura, aprecio, validación y parafraseo.';
+      feedback.innerHTML = '✅ ¡Exacto! ' + q.porques[i];
       feedback.className = 'feedback ok';
       aciertos++;
     } else {
       btn.classList.add('wrong');
       btns[q.correcta].classList.add('correct');
-      feedback.textContent = '😅 Casi. La respuesta correcta es la que valida, se abre y agradece.';
+      feedback.innerHTML =
+        '😅 ¿Por qué no la ' + letras[i] + '? ' + q.porques[i] +
+        '<span class="best">✅ La mejor es la ' + letras[q.correcta] + ': ' + q.porques[q.correcta] + '</span>';
       feedback.className = 'feedback no';
     }
     nextBtn.classList.add('show');
@@ -306,12 +325,11 @@
       idx++;
       render();
     } else {
-      // final
       document.getElementById('quiz').style.display = 'none';
       const f = document.getElementById('final');
       f.style.display = 'block';
-      const emoji = aciertos === 3 ? '🏆' : aciertos === 2 ? '💪' : '🌱';
-      f.querySelector('.emoji').textContent = emoji;
+      const pct = aciertos / preguntas.length;
+      f.querySelector('.emoji').textContent = pct === 1 ? '🏆' : pct >= 0.6 ? '💪' : '🌱';
       document.getElementById('score').textContent = `Acertaste ${aciertos} de ${preguntas.length}. ¡Y ya tienes los tips para recordarlo!`;
     }
   };
